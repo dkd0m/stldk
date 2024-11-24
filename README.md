@@ -4,9 +4,9 @@ Including a simple tool 'stl_btoa' to convert binary STL files into ascii
 ### How to build
 
 ``` bash
-> git clone https://github.com/dkd0m/stldk
-> cd stldk
-> make
+git clone https://github.com/dkd0m/stldk
+cd stldk
+make
 ```
 ## How to use
 
@@ -15,7 +15,7 @@ Copy the stldk.h header and the libstldk.a (or just use the stldk.o) into your c
 ### Example build
 
 ``` bash
-> gcc -Wall -Wextra -std=c11 -pedantic test_program.c -L. -lstldk -o test_program.out 
+gcc -Wall -Wextra -std=c11 -pedantic test_program.c -L. -lstldk -o test_program.out 
 ```
 ### Example usage - test_program.c
 ``` c
