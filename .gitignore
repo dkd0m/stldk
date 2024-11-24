@@ -1,0 +1,5 @@
+*.o
+*.out
+*.stl
+stl_btoa
+libstldk.a
