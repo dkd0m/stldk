@@ -179,18 +179,22 @@ extern size_t stldk_size(uint32_t model_n_faces){
 
 extern StlMesh *stldk_alloc(uint32_t n_faces){
     size_t alloc_size = stldk_size(n_faces);
-    void *p = malloc(alloc_size);
-    if(p == NULL){
+    StlMesh *mesh = malloc(alloc_size);
+    if(mesh == NULL){
         perror("stldk_alloc malloc()");
         return NULL;
     }
-    memset(p, 0, alloc_size);
-    return p;
+    memset(mesh, 0, alloc_size);
+    mesh->n_faces = n_faces;
+    return mesh;
 }
 
 extern StlMesh *stldk_copy(const StlMesh *source){
     unsigned long source_size = stldk_size(source->n_faces);
     StlMesh *const stl_copy = stldk_alloc(source->n_faces);
+    if(stl_copy == NULL){
+        return NULL;
+    }
     return memcpy(stl_copy, source, source_size);
 }
 
