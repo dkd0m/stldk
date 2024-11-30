@@ -2,8 +2,7 @@
 #include <stdio.h>
 #include "stldk.h"
 
-
-static void print_help(){
+static void print_help(void){
     puts("Usage:");
     puts("./stl_btoa file_path");
     return;
@@ -40,6 +39,9 @@ int main(int argc, char *argv[]){
         puts("An error occured reading the stl file.");
         return EXIT_FAILURE;
     }
+    stldk_calculate_normals(stl_file);
+    stldk_flip_normals(stl_file);
+    stldk_calculate_normals(stl_file);
 
     print_stl_file(stl_file);
     free(stl_file);

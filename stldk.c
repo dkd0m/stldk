@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <math.h>
 
 #include "stldk.h"
 
@@ -196,5 +197,57 @@ extern StlMesh *stldk_copy(const StlMesh *source){
         return NULL;
     }
     return memcpy(stl_copy, source, source_size);
+}
+static void vec_difference(float a_i, float a_j, float a_k,float b_i, float b_j, float b_k, float *out_i, float *out_j, float *out_k){
+    *out_i = a_i - b_i;
+    *out_j = a_j - b_j;
+    *out_k = a_k - b_k;
+}
+static double vec_length(float i, float j, float k){
+    return sqrt(pow((double)i, 2) + pow((double)j, 2) + pow((double)k, 2));
+}
+static void vec_cross(float a_i, float a_j, float a_k,float b_i, float b_j, float b_k, float *out_i, float *out_j, float *out_k){
+    *out_i = a_j * b_k - a_k * b_j;
+    *out_j = a_k * b_i - a_i * b_k;
+    *out_k = a_i * b_j - a_j * b_i;
+}
+extern void stldk_calculate_normals(StlMesh *model){
+    for(size_t i = 0; i < model->n_faces; i++){
+        StlFace *f = model->faces + i;
+        float diff_a_i;
+        float diff_a_j;
+        float diff_a_k;
+
+        float diff_b_i;
+        float diff_b_j;
+        float diff_b_k;
+        vec_difference(f->v2[0], f->v2[1], f->v2[2], f->v1[0], f->v1[1], f->v1[2], &diff_a_i, &diff_a_j, &diff_a_k); 
+        vec_difference(f->v3[0], f->v3[1], f->v3[2], f->v1[0], f->v1[1], f->v1[2], &diff_b_i, &diff_b_j, &diff_b_k); 
+        float cross_i;
+        float cross_j;
+        float cross_k;
+        vec_cross(diff_a_i, diff_a_j, diff_a_k, diff_b_i, diff_b_j, diff_b_k, &cross_i, &cross_j, &cross_k);
+        double len = vec_length(cross_i, cross_j, cross_k);
+        cross_i = (float)(cross_i / len);
+        cross_j = (float)(cross_j / len);
+        cross_k = (float)(cross_k / len);
+        f->normal[0]  = cross_i;
+        f->normal[1]  = cross_j;
+        f->normal[2]  = cross_k;
+    }
+}
+
+extern void stldk_flip_normals(StlMesh *model){
+    for(size_t i = 0; i < model->n_faces; i++){
+        StlFace *f = model->faces + i;
+        f->normal[0] = -1 * f->normal[0];
+        f->normal[1] = -1 * f->normal[1];
+        f->normal[2] = -1 * f->normal[2];
+
+        float tv1[3];
+        memcpy(tv1, f->v1, sizeof(float[3]));
+        memcpy(f->v1, f->v2, sizeof(float[3]));
+        memcpy(f->v2, tv1, sizeof(float[3]));
+    }
 }
 

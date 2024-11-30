@@ -32,6 +32,8 @@ StlMesh *stldk_copy(const StlMesh *source);
 size_t stldk_size(uint32_t model_n_faces);
 StlMesh *stldk_read_binary(const char *path);
 FILE *stldk_write_binary(StlMesh *model, const char *path, bool overwrite);
+void stldk_calculate_normals(StlMesh *model);
+void stldk_flip_normals(StlMesh *model);
 
 
 #endif // DKD0M_STLDK_H
