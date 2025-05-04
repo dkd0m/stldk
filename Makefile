@@ -1,9 +1,9 @@
 CC = cc
-CFLAGS = -std=c11 -pedantic -Wall -Wextra -Wconversion -Werror -O2
+CFLAGS = -std=c11 -pedantic -Wall -Wextra -Wconversion -O2 -static
 objects = stldk.o
 
 stl_btoa: stl_btoa.c stldk.o stldk.h libstldk.a
-	$(CC) $(CFLAGS) stldk.o stl_btoa.c -o stl_btoa
+	$(CC) $(CFLAGS) stldk.o stl_btoa.c -o stl_btoa -lm
 
 stldk.o: stldk.c stldk.h
 	$(CC) $(CFLAGS) -c stldk.c -o stldk.o
